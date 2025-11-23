@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Whisper Tale — Anonymous Stories</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <meta name="description" content="Whisper Tale — a quiet space where stories find their voice. Share and read anonymous stories." />
+
+  <style>
+    :root{
+      --bg:#0f1724; /* deep navy */
+      --panel:#111827;
+      --muted:#9AA3B2;
+      --accent:#9B8CFF; /* muted violet */
+      --cream:#F6F2ED;
+      --glass: rgba(255,255,255,0.04);
+      --radius:14px;
+      --max-width:1000px;
+      --gap:1.25rem;
+      --content-padding: clamp(1rem, 2.2vw, 2rem);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(155,140,255,0.06), transparent 10%),
+        linear-gradient(180deg, var(--bg), #041022 80%);
+      color:var(--cream);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding-bottom:4rem;
+    }
+
+    .site {
+      max-width: var(--max-width);
+      margin: 2.25rem auto;
+      padding: var(--content-padding);
+    }
+
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--gap);
+      margin-bottom:1.25rem;
+    }
+
+    .brand {
+      display:flex;
+      gap:.75rem;
+      align-items:center;
+    }
+
+    .logo {
+      width:52px;
+      height:52px;
+      border-radius:12px;
+      background:linear-gradient(135deg, rgba(155,140,255,0.15), rgba(255,255,255,0.02));
+      display:grid;
+      place-items:center;
+      font-family:"Merriweather", serif;
+      font-weight:700;
+      color:var(--accent);
+      border:1px solid rgba(155,140,255,0.06);
+    }
+
+    .title {
+      font-family:"Merriweather", serif;
+      font-size:1.15rem;
+      letter-spacing:0.2px;
+    }
+
+    nav ul {
+      list-style:none;
+      display:flex;
+      gap:.6rem;
+      margin:0;
+      padding:0;
+      align-items:center;
+    }
+
+    nav a {
+      color:var(--muted);
+      text-decoration:none;
+      padding:.45rem .7rem;
+      border-radius:8px;
+      font-weight:500;
+      font-size:.95rem;
+    }
+
+    nav a:hover, nav a:focus {
+      background:var(--glass);
+      color:var(--cream);
+      outline: none;
+    }
+
+    .hero {
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:1.1rem;
+      padding: clamp(1.2rem, 3vw, 2rem);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,0.03);
+      margin-bottom:1rem;
+      box-shadow: 0 6px 30px rgba(2,6,23,0.5);
+    }
+
+    .hero h1 {
+      font-family:"Merriweather", serif;
+      margin:0 0 .25rem 0;
+      font-size:clamp(1.6rem, 3.4vw, 2.4rem);
+      color:var(--cream);
+      line-height:1.05;
+    }
+
+    .hero p.lead {
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+    }
+
+    .cta {
+      display:flex;
+      gap:.6rem;
+      margin-top:.9rem;
+    }
+
+    .btn {
+      padding:.6rem .9rem;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      font-weight:600;
+      font-size:.95rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg,var(--accent), #7ec8ff 120%);
+      color:#061224;
+      box-shadow: 0 6px 18px rgba(155,140,255,0.12);
+    }
+
+    .btn-ghost{
+      background:transparent;
+      color:var(--cream);
+      border:1px solid rgba(255,255,255,0.04);
+    }
+
+    main {
+      display:grid;
+      gap:1rem;
+      margin-top:1rem;
+    }
+
+    section.card {
+      padding:var(--content-padding);
+      border-radius:var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      border:1px solid rgba(255,255,255,0.025);
+    }
+
+    .two-col {
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:1rem;
+    }
+
+    @media (max-width:900px){
+      .two-col{ grid-template-columns:1fr }
+      nav ul{ display:none }
+    }
+
+    .small {
+      color:var(--muted);
+      font-size:.95rem;
+      margin-top:.45rem;
+    }
+
+    /* Stories list */
+    .stories-list { display:flex; flex-direction:column; gap:.85rem; }
+    .story {
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      border-radius:12px;
+      padding:1rem;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .story h3 {
+      margin:0 0 .35rem 0;
+      font-family:"Merriweather", serif;
+      font-size:1.05rem;
+      color:var(--cream);
+    }
+    .story p {
+      margin:0;
+      color:var(--muted);
+      white-space:pre-wrap;
+    }
+    .meta { font-size:.82rem; color:rgba(154,163,178,0.6); margin-top:.5rem }
+
+    /* form */
+    form .form-row { display:flex; flex-direction:column; gap:.5rem; margin-bottom:.7rem }
+    textarea {
+      min-height:120px;
+      padding:.75rem;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.03);
+      background:transparent;
+      color:var(--cream);
+      resize:vertical;
+      font-size:1rem;
+      font-family:inherit;
+    }
+
+    .note { color:var(--muted); font-size:.95rem; }
+    .alert { padding:.6rem .75rem; border-radius:10px; margin-top:.6rem; font-weight:600 }
+
+    .alert.error { background:rgba(255,120,120,0.07); color:#ffb3b3; border:1px solid rgba(255,120,120,0.06) }
+    .alert.success { background:rgba(120,255,160,0.04); color:#8ef0b1; border:1px solid rgba(120,255,160,0.04) }
+
+    footer {
+      max-width:var(--max-width);
+      margin:2rem auto 4rem;
+      padding:var(--content-padding);
+      color:var(--muted);
+      text-align:center;
+      font-size:.95rem;
+    }
+
+    .muted-link { color:var(--muted); text-decoration:underline dotted; cursor:pointer }
+    .pill { display:inline-block; padding:.25rem .6rem; border-radius:999px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.02); color:var(--muted); font-weight:600; font-size:.85rem }
+    .tag { background: rgba(155,140,255,0.06); padding:.25rem .5rem; border-radius:8px; color:var(--accent); font-weight:700; font-size:.85rem }
+
+    /* small device tweaks */
+    @media (max-width:520px){
+      .hero { padding:1rem }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="site" id="top">
+    <header>
+      <div class="brand" aria-hidden="false">
+        <div class="logo" aria-hidden="true">WT</div>
+        <div>
+          <div class="title">Whisper Tale</div>
+          <div style="font-size:.83rem;color:var(--muted)">Stories without names. Feelings without fear.</div>
+        </div>
+      </div>
+
+      <nav aria-label="Primary navigation">
+        <ul>
+          <li><a href="#home" data-target>Home</a></li>
+          <li><a href="#about" data-target>About</a></li>
+          <li><a href="#stories" data-target>Stories</a></li>
+          <li><a href="#share" data-target>Share</a></li>
+          <li><a href="#guidelines" data-target>Guidelines</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- HERO / HOME -->
+    <div id="home" class="hero" role="region" aria-labelledby="homeTitle">
+      <div>
+        <h1 id="homeTitle">A quiet space where stories find their voice.</h1>
+        <p class="lead">This is a place for the words you’ve been holding onto — the ones you couldn’t say out loud, the ones you’ve whispered only in your mind, or the ones you’ve kept locked away for too long. Share anonymously. Read gently.</p>
+
+        <div class="cta" role="group" aria-label="Primary actions">
+          <button class="btn btn-primary" data-scroll="#stories">Read Stories</button>
+          <button class="btn btn-ghost" data-scroll="#share">Share Your Whisper</button>
+        </div>
+
+        <p class="small">No names. No judgment. Just honesty.</p>
+      </div>
+    </div>
+
+    <main>
+      <!-- ABOUT -->
+      <section id="about" class="card" aria-labelledby="aboutTitle">
+        <h2 id="aboutTitle" style="margin-top:0;font-family:'Merriweather',serif">About Whisper Tale</h2>
+        <p>A Space Made for Quiet Voices. Whisper Tale was created for people who needed somewhere to speak freely — without fear of being judged or misunderstood. It is a refuge for unspoken thoughts, hidden truths, quiet dreams, and stories that deserve to be felt.</p>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.9rem">
+          <div style="min-width:220px;flex:1">
+            <h4 style="margin:0 0 .35rem 0">Purpose</h4>
+            <p class="small">Here, anonymity isn’t a mask — it’s a comfort. It allows honesty to flow and reminds us that stories matter, even without names.</p>
+          </div>
+          <div style="min-width:220px;flex:1">
+            <h4 style="margin:0 0 .35rem 0">Mission</h4>
+            <p class="small">To give people a safe, warm space to express themselves without fear or pressure — a home for stories that might never be spoken aloud anywhere else.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STORIES + SHARE (two column on wide screens) -->
+      <div class="two-col">
+        <!-- STORIES -->
+        <section id="stories" class="card" aria-labelledby="storiesTitle">
+          <h2 id="storiesTitle" style="font-family:'Merriweather',serif">Whispers Shared Here</h2>
+          <p class="small">The stories below were written by people who needed a moment of honesty — strangers who chose to speak through their hearts instead of their names. Read them gently. Feel them fully.</p>
+
+          <div id="storiesList" class="stories-list" aria-live="polite" style="margin-top:1rem">
+            <!-- stories inserted by JS -->
+          </div>
+
+          <div style="margin-top:.9rem">
+            <button class="btn btn-ghost" id="clearLocal">Clear Local Stories</button>
+            <span class="small" style="margin-left:.6rem;color:var(--muted)">Clears only stories saved in your browser. This won't affect server (there is none).</span>
+          </div>
+        </section>
+
+        <!-- SHARE -->
+        <aside id="share" class="card" aria-labelledby="shareTitle">
+          <h3 id="shareTitle" style="font-family:'Merriweather',serif;margin-top:0">Share Your Whisper</h3>
+          <p class="small">Your story matters — even the parts you’re afraid to admit. Release them here. You don't need a name.</p>
+
+          <form id="storyForm" novalidate>
+            <div class="form-row">
+              <label for="category" class="note">Category (optional)</label>
+              <select id="category" name="category" style="padding:.6rem;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--cream);">
+                <option value="">— Select —</option>
+                <option>Confession</option>
+                <option>Healing</option>
+                <option>Love</option>
+                <option>Fiction</option>
+                <option>Random Thought</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label for="storyText" class="note">Tell your story (required)</label>
+              <textarea id="storyText" name="storyText" placeholder="Tell your story here..." required aria-required="true"></textarea>
+            </div>
+
+            <div style="display:flex;gap:.6rem;align-items:center">
+              <button type="submit" class="btn btn-primary">Share My Whisper</button>
+              <div id="formMsg" role="status" aria-live="polite"></div>
+            </div>
+
+            <div id="formAlert" style="margin-top:.6rem"></div>
+          </form>
+
+          <div style="margin-top:1rem">
+            <p class="note">Guidelines: No names, no identifying info, no hate or explicit material. Stories are moderated client-side for safety.</p>
+          </div>
+        </aside>
+      </div>
+
+      <!-- GUIDELINES -->
+      <section id="guidelines" class="card" aria-labelledby="guidelinesTitle">
+        <h2 id="guidelinesTitle" style="font-family:'Merriweather',serif">Keeping Whisper Tale Safe</h2>
+        <p class="small">To protect the comfort of this space and the honesty of every story, please follow these simple guidelines:</p>
+
+        <ul class="small" style="margin-top:.6rem">
+          <li>Respect others’ stories</li>
+          <li>Avoid names or identifying information (no emails, phones, URLs)</li>
+          <li>No hateful, violent, or explicit content</li>
+          <li>Keep stories original and sincere</li>
+          <li>Do not submit spam or copied work</li>
+        </ul>
+
+        <h4 style="margin-top:.8rem">FAQ</h4>
+        <dl class="small" style="margin-top:.4rem">
+          <dt style="font-weight:700">Why anonymous?</dt>
+          <dd>Honesty flows easier when identity isn't a barrier. Anonymity creates a chance for truth without fear.</dd>
+
+          <dt style="font-weight:700;margin-top:.45rem">Can anyone post?</dt>
+          <dd>Yes. Whisper Tale is open to everyone. Use the guidelines.</dd>
+
+          <dt style="font-weight:700;margin-top:.45rem">Are stories moderated?</dt>
+          <dd>Stories are client-side moderated. If you deploy to a server, add server-side moderation for safety.</dd>
+
+          <dt style="font-weight:700;margin-top:.45rem">Can I edit or delete my story?</dt>
+          <dd>In this build, stories saved in your browser can be removed by clicking "Clear Local Stories". There is no server storage in this version.</dd>
+        </dl>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <div class="pill">Whisper Tale</div>
+    <div style="margin-top:.6rem">Share softly. Read gently.</div>
+    <div style="margin-top:.6rem;color:var(--muted);font-size:.92rem">Built for privacy & reflection — a student project prototype.</div>
+  </footer>
+
+  <script>
+    /**
+     * Whisper Tale - client-side functionality
+     * - Saves stories to localStorage (anonymous)
+     * - Basic client-side moderation (no emails, phones, URLs, banned words)
+     * - Renders stories on the page (most recent first)
+     *
+     * If you deploy to a server later, replace localStorage with a server API and add server-side moderation & rate limits.
+     */
+
+    (function(){
+      'use strict';
+
+      const STORAGE_KEY = 'whisper_tale_stories_v1';
+
+      // A small banned words list you can expand (lowercase)
+      const BANNED_WORDS = ['fuck','shit','bastard','idiot']; // you can change/remove items as you like
+
+      // Regex checks
+      const urlRegex = /(https?:\/\/|www\.)\S+/i;
+      const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+      const phoneRegex = /\b(?:\+?\d{1,3}[-.\s]?)*\d{6,12}\b/;
+
+      // Elements
+      const storiesList = document.getElementById('storiesList');
+      const storyForm = document.getElementById('storyForm');
+      const storyText = document.getElementById('storyText');
+      const categoryEl = document.getElementById('category');
+      const formAlert = document.getElementById('formAlert');
+      const formMsg = document.getElementById('formMsg');
+      const clearLocal = document.getElementById('clearLocal');
+
+      // Smooth scroll for header buttons and nav
+      document.querySelectorAll('[data-scroll]').forEach(btn=>{
+        btn.addEventListener('click', function(e){
+          const target = document.querySelector(this.dataset.scroll);
+          if(target){
+            target.scrollIntoView({behavior:'smooth', block:'start'});
+            target.focus({preventScroll:true});
+          }
+        });
+      });
+
+      // Navigation links smooth scroll
+      document.querySelectorAll('a[data-target], nav a').forEach(a=>{
+        a.addEventListener('click', function(e){
+          const href = this.getAttribute('href') || this.dataset.href;
+          if(href && href.startsWith('#')){
+            e.preventDefault();
+            const el = document.querySelector(href);
+            if(el){
+              el.scrollIntoView({behavior:'smooth', block:'start'});
+              // Set hash without jumping
+              history.replaceState(null, '', href);
+            }
+          }
+        });
+      });
+
+      // Utilities
+      function nowISO(){ return new Date().toISOString(); }
+      function uid(){ return 's_' + Math.random().toString(36).slice(2,9); }
+
+      function loadStories(){
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if(!raw) return [];
+          return JSON.parse(raw);
+        } catch (e){
+          console.error('Failed reading local stories', e);
+          return [];
+        }
+      }
+
+      function saveStories(list){
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        } catch(e){
+          console.error('Failed to save stories', e);
+        }
+      }
+
+      function sanitizeText(text){
+        // Trim and normalize whitespace
+        return text.replace(/\r/g,'').trim();
+      }
+
+      function validateStory(text){
+        const t = text.trim();
+        if(!t) return 'Please write your story before sharing.';
+        if(urlRegex.test(t)) return 'Please remove URLs before submitting.';
+        if(emailRegex.test(t)) return 'Please remove emails or contact details.';
+        if(phoneRegex.test(t)) return 'Please remove phone numbers or contact details.';
+        // banned words
+        const lower = t.toLowerCase();
+        for(const w of BANNED_WORDS){
+          if(lower.includes(w)) return 'Your story contains disallowed words. Please remove them.';
+        }
+        if(t.length > 8000) return 'Story is too long. Please shorten it.';
+        return null;
+      }
+
+      function renderStories(){
+        const list = loadStories();
+        storiesList.innerHTML = '';
+        // Show most recent first
+        list.slice().reverse().forEach(s => {
+          const el = document.createElement('article');
+          el.className = 'story';
+          const title = document.createElement('h3');
+          title.textContent = s.title || (s.category ? s.category : 'Untitled Whisper');
+          const body = document.createElement('p');
+          body.textContent = s.text;
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          const date = new Date(s.createdAt);
+          meta.textContent = `${date.toLocaleString()} • ${s.id}`;
+          el.appendChild(title);
+          el.appendChild(body);
+          el.appendChild(meta);
+          storiesList.appendChild(el);
+        });
+
+        if(!list.length){
+          storiesList.innerHTML = '<div class="story"><h3>Welcome — there are no stories yet</h3><p class="small">Be the first to share a whisper. Your words are safe here.</p></div>';
+        }
+      }
+
+      function seedSampleStories(){
+        const existing = loadStories();
+        if(existing && existing.length) return;
+        const samples = [
+          {
+            id: uid(),
+            title: 'The Weight I Never Mentioned',
+            text: "I’ve always been the strong one. The one who doesn’t break, the one who listens, the one who keeps everything together.\nBut sometimes, I wish someone would look at me and say, “You don’t have to carry it all alone.”",
+            category: 'Confession',
+            createdAt: nowISO()
+          },
+          {
+            id: uid(),
+            title: 'If Only I Said It Sooner',
+            text: "I cared. More than I ever admitted.\nBut fear made me quiet.\nNow I’m learning that silence has its own regrets.",
+            category: 'Love',
+            createdAt: nowISO()
+          },
+          {
+            id: uid(),
+            title: 'Healing, Slowly',
+            text: "Some days I’m okay. Some days I’m not.\nBut I’m trying — and maybe that’s enough.",
+            category: 'Healing',
+            createdAt: nowISO()
+          }
+        ];
+        saveStories(samples);
+      }
+
+      // Form handling
+      storyForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        formAlert.innerHTML = '';
+        formMsg.textContent = '';
+
+        const text = sanitizeText(storyText.value || '');
+        const cat = categoryEl.value || '';
+
+        const err = validateStory(text);
+        if(err){
+          formAlert.innerHTML = `<div class="alert error">${err}</div>`;
+          storyText.focus();
+          return;
+        }
+
+        // Create new story object
+        const newStory = {
+          id: uid(),
+          title: generateTitle(text),
+          text: text,
+          category: cat,
+          createdAt: nowISO()
+        };
+
+        const list = loadStories();
+        list.push(newStory);
+        saveStories(list);
+
+        storyText.value = '';
+        categoryEl.value = '';
+        formAlert.innerHTML = `<div class="alert success">Your whisper has been saved locally. Thank you for sharing.</div>`;
+        formMsg.textContent = 'Saved';
+        setTimeout(()=>{ formMsg.textContent = '' }, 2200);
+
+        renderStories();
+      });
+
+      // small heuristic to create short title from first line
+      function generateTitle(text){
+        const t = text.trim().split('\\n')[0].slice(0,60);
+        return t.length ? (t + (t.length >= 60 ? '…' : '')) : 'Untitled Whisper';
+      }
+
+      clearLocal.addEventListener('click', function(){
+        if(!confirm('Clear all stories saved in this browser? This cannot be undone.')) return;
+        localStorage.removeItem(STORAGE_KEY);
+        renderStories();
+      });
+
+      // initialize
+      seedSampleStories();
+      renderStories();
+
+      // Accessibility: keyboard focus outline for keyboard users
+      (function keyboardOutline(){
+        function handleFirstTab(e){
+          if(e.key === 'Tab'){
+            document.body.classList.add('show-focus-outline');
+            window.removeEventListener('keydown', handleFirstTab);
+            window.addEventListener('mousedown', removeOutlineOnce);
+          }
+        }
+        function removeOutlineOnce(){
+          document.body.classList.remove('show-focus-outline');
+          window.removeEventListener('mousedown', removeOutlineOnce);
+          window.addEventListener('keydown', handleFirstTab);
+        }
+        window.addEventListener('keydown', handleFirstTab);
+      })();
+
+    })();
+  </script>
+</body>
+</html>
